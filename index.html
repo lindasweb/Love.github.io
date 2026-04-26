@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Corazón con Nombre</title>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+
+/* Animación */
+@keyframes aparecer{
+    to{
+        opacity:1;
+    }
+}
+</style>
+</head>
+
+<body>
+<div id="login" class="pantalla">
+    <div class="card">
+
+        <h1>💌 Un pequeño detalle</h1>
+        <p class="mensaje">
+            Escribe tu nombre y descubre algo bonito ❤️
+        </p>
+
+        <input type="text" id="nombre" placeholder="Escribe tu nombre...">
+
+        <button onclick="iniciar()">Continuar ❤️</button>
+
+    </div>
+</div>
+
+<div id="main" class="pantalla" style="display:none;">
+    
+    <div class="card corazon-card">
+
+        <div class="top-bar">
+            <span>❤️ ❤️ ❤️</span>
+           <p id="formando">Formando corazón</p>
+        </div>
+
+        <div id="corazon"></div>
+
+    </div>
+
+</div>
+<p id="fraseFinal" style="opacity:0;"></p>
+
+<script>
+function iniciar(){
+    let nombre = document.getElementById("nombre").value;
+    if(nombre.trim() === "") return;
+
+    document.getElementById("login").style.display = "none";
+    document.getElementById("main").style.display = "block";
+
+    crearCorazon(nombre);
+    lluviaNombre(nombre); 
+}
+function crearCorazon(nombre){
+    const contenedor = document.getElementById("corazon");
+    contenedor.innerHTML = "";
+
+let forma = [
+"          xxxxxxx       xxxxxxx          ",
+"       xxxxxxxxxxxx   xxxxxxxxxxxx       ",
+"     xxxxxxxxxxxxxxxxxxxxxxxxxxxxx     ",
+"    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx    ",
+"   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   ",
+"  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ",
+"  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ",
+"  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ",
+"   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   ",
+"    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx    ",
+"     xxxxxxxxxxxxxxxxxxxxxxxxxxxxx     ",
+"      xxxxxxxxxxxxxxxxxxxxxxxxxxx      ",
+"        xxxxxxxxxxxxxxxxxxxxxxx        ",
+"          xxxxxxxxxxxxxxxxxxx          ",
+"            xxxxxxxxxxxxxxx            ",
+"              xxxxxxxxxxx              ",
+"                xxxxxxx                ",
+"                  xxx                  ",
+"                   x                   "
+];
+
+    let filas = [];
+let i = 0; 
+
+forma.forEach(linea => {
+    let nueva = "";
+
+    for(let char of linea){
+        if(char === "x"){
+            nueva += nombre[i % nombre.length];
+            i++;
+        }else{
+            nueva += " ";
+        }
+    }
+
+    filas.push(nueva);
+});
+
+   filas.forEach((fila, index) => {
+
+        let div = document.createElement("div");
+
+        div.style.whiteSpace = "pre";
+        div.style.textAlign = "center";
+        div.style.color = "red";
+      div.style.fontFamily = "'Courier New', monospace";
+   div.style.fontSize = "16px";
+div.style.lineHeight = "15px";
+div.style.letterSpacing = "0px";;
+        div.style.opacity = "0";
+        div.style.transform = "translateY(-80px)";
+
+        
+        div.innerText = fila;
+        contenedor.appendChild(div);
+
+        setTimeout(() => {
+            div.style.transition = "all 0.6s ease";
+            div.style.opacity = "1";
+            div.style.transform = "translateY(0)";
+        }, index * 120);
+    });
+    setTimeout(()=>{
+    let el = document.getElementById("fraseFinal");
+
+    el.style.transition = "1.5s";
+    el.style.opacity = "1";
+
+    let texto = `
+Cuéntame cada cosa terrible que hayas hecho
+y déjame amarte de todos modos.`;
+
+    escribirTexto(texto, el);
+
+}, 2500); // justo cuando termina el corazón
+}
+function lluviaCorazones(){
+    setInterval(() => {
+        let corazon = document.createElement("div");
+
+        corazon.innerText = "❤️";
+        corazon.style.position = "fixed";
+        corazon.style.top = "-20px";
+        corazon.style.left = Math.random() * window.innerWidth + "px";
+
+        corazon.style.opacity = "0.3"; // 🔥 transparente
+        corazon.style.fontSize = (10 + Math.random() * 20) + "px";
+
+        corazon.style.pointerEvents = "none";
+
+        document.body.appendChild(corazon);
+
+        let duracion = 3000 + Math.random() * 3000;
+
+        corazon.animate([
+            { transform: "translateY(0px)" },
+            { transform: `translateY(${window.innerHeight}px)` }
+        ], {
+            duration: duracion,
+            easing: "linear"
+        });
+
+        setTimeout(() => {
+            corazon.remove();
+        }, duracion);
+
+    }, 300); // 👈 baja intensidad (no saturado)
+}
+let puntos = 0;
+setInterval(()=>{
+    let texto = "Formando corazón" + ".".repeat(puntos);
+    document.getElementById("formando").innerText = texto;
+    puntos = (puntos + 1) % 4;
+},500);
+// ACTIVAR
+lluviaCorazones();
+
+function lluviaNombre(nombre){
+    setInterval(() => {
+        let letra = document.createElement("div");
+
+        // 👇 AQUÍ VA LO QUE QUIERES (mezcla)
+        if(Math.random() < 0.5){
+            letra.innerText = "❤️";
+        }else{
+           letra.innerText = nombre;
+        }
+
+        letra.style.position = "fixed";
+        letra.style.top = "-20px";
+        letra.style.left = Math.random() * window.innerWidth + "px";
+
+        letra.style.opacity = "0.15";
+        letra.style.fontSize = (12 + Math.random() * 18) + "px";
+        letra.style.color = "red";
+
+        letra.style.pointerEvents = "none";
+        letra.style.fontFamily = "'Courier New', monospace";
+
+        document.body.appendChild(letra);
+
+        let duracion = 4000 + Math.random() * 4000;
+
+        letra.animate([
+            { transform: "translateY(0px)" },
+            { transform: `translateY(${window.innerHeight}px)` }
+        ], {
+            duration: duracion,
+            easing: "linear"
+        });
+
+        setTimeout(() => {
+            letra.remove();
+        }, duracion);
+
+    }, 200);
+}
+function escribirTexto(texto, elemento){
+    let i = 0;
+    elemento.innerHTML = "";
+
+    let intervalo = setInterval(()=>{
+        elemento.innerHTML += texto[i];
+        i++;
+        if(i >= texto.length) clearInterval(intervalo);
+    }, 40);
+}
+</script>
+
+</body>
+</html>
